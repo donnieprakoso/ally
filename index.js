@@ -1,3 +1,15 @@
+/*
+Ally
+@donnieprakoso
+2014-11-24
+---
+
+A little node app to check how many times URL has been shared on Twitter and Facebook. 
+Named after friend's newborn baby.
+
+*/
+
+
 var express = require('express');
 var app = express();
 var winston = require('winston');
@@ -36,9 +48,7 @@ function getFacebook(url){
 	unirest.get('https://graph.facebook.com/fql?q=SELECT%20url,%20normalized_url,%20share_count,%20like_count,%20comment_count,%20total_count,commentsbox_count,%20comments_fbid,%20click_count%20FROM%20link_stat%20WHERE%20url=%27'+url+'%27')
 	.end(function (response) {
 		var data = JSON.parse(response.body);
-		var checkData = db('urls').find({ 'url': url }).value();
-		
-		console.log(data);
+		var checkData = db('urls').find({ 'url': url }).value();		
 		if(data.data!==undefined){					
 			if(checkData===undefined){
 				db('urls').push({'url':url,'facebook':{'share_count':data.data[0].share_count,'like_count':data.data[0].like_count,'comment_count':data.data[0].comment_count,'total_count':data.data[0].total_count}});	
@@ -63,7 +73,6 @@ app.get('/shared/:url', function(req, res){
 	var data   = db('urls').find({ url: urlProcess }).value();
 	getTwitter(urlProcess);
 	getFacebook(urlProcess);
-	winston.log(data);
 	var result= db('urls').find({'url':urlProcess}).value();
 	if(result===undefined){
 		res.send({"result":0});
