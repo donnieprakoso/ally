@@ -1,1 +1,52 @@
-Test
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ally - Count URL share">
+    <meta name="author" content="@donnieprakoso">
+    
+
+    <title>Ally - Count URL Share</title>
+<link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">  
+</head>
+
+  <body>
+    <div class="container">
+
+      <div class="row" style='margin-top:100px;'>
+      <div class='col-xs-12'>
+        <h1 style="font-size:72px;font-family: 'Poiret One', cursive;">Ally</h1>
+        <p class="lead" style='margin-top:50px;'>
+          Count your URL share with ease.
+        </p>
+        <h3 style="font-size:36px;font-family: 'Poiret One', cursive;">Request</h3>
+        <code>
+          http://localhost:3001/shared/http%3A%2F%2Fmalesbanget.com
+        </code>
+
+        <h3 style="font-size:36px;font-family: 'Poiret One', cursive;">Response</h3>
+        <code>
+{
+  "url": "http://malesbanget.com",
+  "twitter": {
+    "count": 15034
+  },
+  "facebook": {
+    "share_count": 3725,
+    "like_count": 4614,
+    "comment_count": 2100,
+    "total_count": 10439
+  }
+}   
+        </code>
+  <br/><br/>
+        <a href='https://github.com/donnieprakoso/ally'><span class='btn btn-lg btn-default'>Github</span></a>
+      </div>
+
+    </div>
+  </body>
+</html>
