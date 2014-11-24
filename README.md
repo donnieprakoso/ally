@@ -86,6 +86,12 @@ One thing to note about this app is it doesn't use any relational database nor N
 [@donnieprakoso
 ](https://twitter.com/donnieprakoso)
 
+##Known Bugs  
+
+- URL with # will failed
+- Bug on unencoded string 
+
+
 ##License
 Sak karep mu
 	
