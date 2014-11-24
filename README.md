@@ -1,7 +1,7 @@
 Ally
 ====
 
-Shared count service for Twitter and Facebook. I'll update the others later on.
+A little node app to check how many times requested URL(s) has been shared on Twitter and Facebook. 
 
 ##Installation
 
@@ -18,5 +18,15 @@ Shared count service for Twitter and Facebook. I'll update the others later on.
 ###Batch Request
 	/batch/
 	Method : Post
-	Parameters : url
+	Parameters : url (x-www-form-urlencoded) (Array)
+
+##Database and Mechanism
+One thing to note about this app is it doesn't use any relational database nor NoSQL but using a flat file database, called [LowDB](https://github.com/typicode/lowdb). For the first time query for the URL, it will return zero result while performing a query to respective social media platform in the background.
+
+##Author
+[@donnieprakoso
+](https://twitter.com/donnieprakoso)
+
+##License
+Sak karep mu
 	
