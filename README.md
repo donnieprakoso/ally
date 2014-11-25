@@ -1,7 +1,7 @@
 Ally
 ====
 
-A little node app to check how many times URL has been shared on Twitter and Facebook. 
+A little node app to check how many times URL has been shared on Twitter, Pinterest, LinkedIn, Google+ and Facebook. 
 
 ##Installation
 
@@ -21,18 +21,27 @@ A little node app to check how many times URL has been shared on Twitter and Fac
 	
 **Response**  
    
-	{
-	  "url": "http://malesbanget.com",
-	  "twitter": {
-	    "count": 15034
-	  },
-	  "facebook": {
-	    "share_count": 3725,
-	    "like_count": 4614,
-	    "comment_count": 2100,
-	    "total_count": 10439
-	  }
-	}	
+		{
+		  "url": "http://malesbanget.com",
+		  "facebook": {
+		    "share_count": 3736,
+		    "like_count": 4623,
+		    "comment_count": 2100,
+		    "total_count": 10459
+		  },
+		  "twitter": {
+		    "count": 15035
+		  },
+		  "pinterest": {
+		    "count": 0
+		  },
+		  "linkedin": {
+		    "count": 81
+		  },
+		  "google+": {
+		    "count": 210075
+		  }
+		}
 	
 ###Batch Request
 	/batch/
@@ -51,32 +60,50 @@ A little node app to check how many times URL has been shared on Twitter and Fac
 
 **Response**
 
-	[
-	    {
-	        "url": "http://malesbanget.com/2012/09/polling-kamu-paling-suka-browsing-pake-apa/",
-	        "facebook": {
-	            "share_count": 7,
-	            "like_count": 6,
-	            "comment_count": 8,
-	            "total_count": 21
-	        },
-	        "twitter": {
-	            "count": 68
-	        }
-	    },
-	    {
-	        "url": "http://malesbanget.com/2013/12/kompilasi-bintang-jav-paling-kondang",
-	        "facebook": {
-	            "share_count": 17,
-	            "like_count": 7,
-	            "comment_count": 4,
-	            "total_count": 28
-	        },
-	        "twitter": {
-	            "count": 152
-	        }
-	    }
-	]
+		[
+		    {
+		        "url": "http://malesbanget.com/2012/09/polling-kamu-paling-suka-browsing-pake-apa/",
+		        "twitter": {
+		            "count": 68
+		        },
+		        "facebook": {
+		            "share_count": 7,
+		            "like_count": 6,
+		            "comment_count": 8,
+		            "total_count": 21
+		        },
+		        "pinterest": {
+		            "count": 0
+		        },
+		        "google+": {
+		            "count": 1
+		        },
+		        "linkedin": {
+		            "count": 0
+		        }
+		    },
+		    {
+		        "url": "http://malesbanget.com/2013/12/kompilasi-bintang-jav-paling-kondang",
+		        "twitter": {
+		            "count": 152
+		        },
+		        "facebook": {
+		            "share_count": 17,
+		            "like_count": 7,
+		            "comment_count": 4,
+		            "total_count": 28
+		        },
+		        "pinterest": {
+		            "count": 0
+		        },
+		        "google+": {
+		            "count": 0
+		        },
+		        "linkedin": {
+		            "count": 0
+		        }
+		    }
+		]
 
 
 ##Database and Mechanism

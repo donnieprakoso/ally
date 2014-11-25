@@ -60,6 +60,69 @@ function getFacebook(url){
 	});
 }
 
+function getLinkedIn(url){
+	unirest.get('http://www.linkedin.com/countserv/count/share?url='+url+'&format=json')
+	.end(function (response) {
+		console.log(response.body);
+		var data = response.body;		
+		var checkData = db('urls').find({ 'url': url }).value();			
+		if(data!==undefined){					
+			if(checkData===undefined){
+				db('urls').push({'url':url,'linkedin':{'count':data.count}});	
+			}else{
+				console.log("Updating value LinkedIn");			
+				db('urls').find({'url':url}).assign({'linkedin':{'count':data.count}});
+			}
+		}else{
+			
+		}
+	});
+}
+
+function getPinterest(url){
+	unirest.get('http://api.pinterest.com/v1/urls/count.json?url='+url)
+	.end(function (response) {
+		var data = response.body;		
+		data=data.replace('receiveCount(','');
+		data=data.replace(')','');
+        data = JSON.parse(data);
+		var checkData = db('urls').find({ 'url': url }).value();		
+		
+		if(data!==undefined){					
+			if(checkData===undefined){
+				db('urls').push({'url':url,'pinterest':{'count':data.count}});	
+			}else{
+				console.log("Updating value");			
+				db('urls').find({'url':url}).assign({'pinterest':{'count':data.count}});
+			}
+		}else{
+			console.log("Pinterest undefined");
+		}
+	});
+}
+
+function getGoogle(url){
+	var jsonRequest = "[{ 'method': 'pos.plusones.get', 'id': 'p', 'params': { 'nolog': true, 'id': '"+url+"', 'source': 'widget', 'userId': '@viewer', 'groupId': '@self' }, 'jsonrpc': '2.0', 'key': 'p', 'apiVersion': 'v1' }]";
+	unirest.post('https://clients6.google.com/rpc')
+	.headers({ 'Content-type': 'application/json' })
+	.send(jsonRequest).end(function (response) {
+		var data = response.body[0];        
+		var checkData = db('urls').find({ 'url': url }).value();				
+		if(data!==undefined){					
+			if(checkData===undefined){
+				db('urls').push({'url':url,'google+':{'count':data.result.metadata.globalCounts.count}});	
+			}else{
+				console.log("Updating value");			
+				db('urls').find({'url':url}).assign({'google+':{'count':data.result.metadata.globalCounts.count}});
+			}
+		}else{
+			console.log("Google+ undefined");
+		}
+		
+	});
+
+}
+
 
 
 app.get('/', function(req, res){
@@ -73,6 +136,9 @@ app.get('/shared/:url', function(req, res){
 	var data   = db('urls').find({ url: urlProcess }).value();
 	getTwitter(urlProcess);
 	getFacebook(urlProcess);
+	getPinterest(urlProcess);
+	getLinkedIn(urlProcess);
+	getGoogle(urlProcess);
 	var result= db('urls').find({'url':urlProcess}).value();
 	if(result===undefined){
 		res.send({"result":0});
@@ -88,6 +154,9 @@ app.post('/batch', function(req, res){
 	for(var i =0;i<urlProcess.length;i++){
 		getTwitter(urlProcess[i]);
 		getFacebook(urlProcess[i]);
+		getPinterest(urlProcess);
+		getLinkedIn(urlProcess);
+		getGoogle(urlProcess);
 		var result = db('urls').find({'url':urlProcess[i]}).value();
 		if(result===undefined){
 			results.push({'url':urlProcess[i],'result':0});
