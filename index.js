@@ -8,8 +8,6 @@ A little node app to check how many times URL has been shared on Twitter and Fac
 Named after friend's newborn baby.
 
 */
-
-
 var express = require('express');
 var app = express();
 var winston = require('winston');
@@ -27,8 +25,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(bodyParser());
 
-winston.log('info', 'Hello distributed log files!');
-
 function getTwitter(url){
 	unirest.get('http://cdn.api.twitter.com/1/urls/count.json?url='+url)
 	.end(function (response) {
@@ -37,7 +33,6 @@ function getTwitter(url){
 		if(checkData===undefined){
 			db('urls').push({'url':url,'twitter':{'count':data.count}});	
 		}else{
-			console.log("Updating value");			
 			db('urls').find({'url':url}).assign({'twitter':{'count':data.count}});
 		}
 		
@@ -53,7 +48,6 @@ function getFacebook(url){
 			if(checkData===undefined){
 				db('urls').push({'url':url,'facebook':{'share_count':data.data[0].share_count,'like_count':data.data[0].like_count,'comment_count':data.data[0].comment_count,'total_count':data.data[0].total_count}});	
 			}else{
-				console.log("Updating value");			
 				db('urls').find({'url':url}).assign({'facebook':{'share_count':data.data[0].share_count,'like_count':data.data[0].like_count,'comment_count':data.data[0].comment_count,'total_count':data.data[0].total_count}});
 			}
 		}
@@ -63,14 +57,12 @@ function getFacebook(url){
 function getLinkedIn(url){
 	unirest.get('http://www.linkedin.com/countserv/count/share?url='+url+'&format=json')
 	.end(function (response) {
-		console.log(response.body);
 		var data = response.body;		
 		var checkData = db('urls').find({ 'url': url }).value();			
 		if(data!==undefined){					
 			if(checkData===undefined){
 				db('urls').push({'url':url,'linkedin':{'count':data.count}});	
 			}else{
-				console.log("Updating value LinkedIn");			
 				db('urls').find({'url':url}).assign({'linkedin':{'count':data.count}});
 			}
 		}else{
@@ -92,18 +84,16 @@ function getPinterest(url){
 			if(checkData===undefined){
 				db('urls').push({'url':url,'pinterest':{'count':data.count}});	
 			}else{
-				console.log("Updating value");			
 				db('urls').find({'url':url}).assign({'pinterest':{'count':data.count}});
 			}
 		}else{
-			console.log("Pinterest undefined");
 		}
 	});
 }
 
 function getGoogle(url){
 	var jsonRequest = "[{ 'method': 'pos.plusones.get', 'id': 'p', 'params': { 'nolog': true, 'id': '"+url+"', 'source': 'widget', 'userId': '@viewer', 'groupId': '@self' }, 'jsonrpc': '2.0', 'key': 'p', 'apiVersion': 'v1' }]";
-	unirest.post('https://clients6.google.com/rpc')
+	unirest.post('https://clients6.google.com/rpc?key=AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ')
 	.headers({ 'Content-type': 'application/json' })
 	.send(jsonRequest).end(function (response) {
 		var data = response.body[0];        
@@ -112,11 +102,9 @@ function getGoogle(url){
 			if(checkData===undefined){
 				db('urls').push({'url':url,'google+':{'count':data.result.metadata.globalCounts.count}});	
 			}else{
-				console.log("Updating value");			
 				db('urls').find({'url':url}).assign({'google+':{'count':data.result.metadata.globalCounts.count}});
 			}
 		}else{
-			console.log("Google+ undefined");
 		}
 		
 	});
@@ -126,13 +114,12 @@ function getGoogle(url){
 
 
 app.get('/', function(req, res){
-	console.log("Index");
 
 });
 
 app.get('/shared/:url', function(req, res){	
 	var urlProcess = req.param('url');
-	winston.log("info","Processing "+urlProcess);
+	console.log("Processing "+urlProcess);
 	var data   = db('urls').find({ url: urlProcess }).value();
 	getTwitter(urlProcess);
 	getFacebook(urlProcess);
@@ -152,11 +139,12 @@ app.post('/batch', function(req, res){
 	var urlProcess = req.body.url;
 	var results=[];
 	for(var i =0;i<urlProcess.length;i++){
+        console.log("Processing "+urlProcess[i]);
 		getTwitter(urlProcess[i]);
 		getFacebook(urlProcess[i]);
-		getPinterest(urlProcess);
-		getLinkedIn(urlProcess);
-		getGoogle(urlProcess);
+		getPinterest(urlProcess[i]);
+		getLinkedIn(urlProcess[i]);
+		getGoogle(urlProcess[i]);
 		var result = db('urls').find({'url':urlProcess[i]}).value();
 		if(result===undefined){
 			results.push({'url':urlProcess[i],'result':0});
