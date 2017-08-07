@@ -3,6 +3,7 @@ Ally
 
 A little node app to check how many times URL has been shared on Twitter, Pinterest, LinkedIn, Google+ and Facebook. 
 
+
 ##Installation
 
 1. Clone or download it
@@ -121,4 +122,3 @@ One thing to note about this app is it doesn't use any relational database nor N
 
 ##License
 Sak karep mu
-	
